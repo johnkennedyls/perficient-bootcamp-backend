@@ -14,6 +14,7 @@ import java.util.UUID;
 public class User {
     @Id
     private UUID userId;
+    private String name;
     @Column(unique=true)
     private String email;
     private String password;
@@ -21,6 +22,4 @@ public class User {
     @ManyToOne(optional = false, cascade = CascadeType.ALL)
     @JoinColumn(name = "role_role_id", nullable = false)
     private Role role;
-    @OneToMany(mappedBy = "shopUser")
-    private List<ShopOrder> shopOrders;
 }
