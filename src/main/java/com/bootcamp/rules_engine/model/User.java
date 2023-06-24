@@ -3,7 +3,6 @@ package com.bootcamp.rules_engine.model;
 import lombok.*;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 @Getter
