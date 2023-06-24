@@ -3,6 +3,7 @@ package com.bootcamp.rules_engine.api;
 import com.bootcamp.rules_engine.dto.request.RoleDTO;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RequestMapping(RoleAPI.BASE_ROLE_URL)

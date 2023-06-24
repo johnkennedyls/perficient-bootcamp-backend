@@ -1,7 +1,9 @@
 package com.bootcamp.rules_engine.dto.request;
 
 import lombok.*;
-import org.antlr.v4.runtime.misc.NotNull;
+
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 @Getter
 @Setter

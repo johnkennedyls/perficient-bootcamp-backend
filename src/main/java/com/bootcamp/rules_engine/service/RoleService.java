@@ -1,18 +1,21 @@
 package com.bootcamp.rules_engine.service;
 
 import com.bootcamp.rules_engine.dto.request.RoleDTO;
+import com.bootcamp.rules_engine.enums.UserRole;
 import com.bootcamp.rules_engine.mapper.RoleMapper;
+import com.bootcamp.rules_engine.model.Role;
 import com.bootcamp.rules_engine.repository.RoleRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
 public class RoleService {
-    private final RoleRepository roleRepository;
+    /*private final RoleRepository roleRepository;
     private final RoleMapper roleMapper;
     private final CellphoneShopExceptionBuilder exceptionBuilder = new CellphoneShopExceptionBuilder();
 
@@ -48,5 +51,5 @@ public class RoleService {
                 .stream()
                 .map(roleMapper::fromRoleToRoleDTO)
                 .collect(Collectors.toList());
-    }
+    }*/
 }
