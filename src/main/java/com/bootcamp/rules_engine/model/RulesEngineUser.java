@@ -11,7 +11,7 @@ import java.util.UUID;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class User {
+public class RulesEngineUser {
     @Id
     private UUID userId;
     private String name;

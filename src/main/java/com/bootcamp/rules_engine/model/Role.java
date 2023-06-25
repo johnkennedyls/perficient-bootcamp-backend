@@ -18,7 +18,7 @@ import java.util.UUID;
 public class Role {
 
     @OneToMany(mappedBy = "role")
-    private List<User> users;
+    private List<RulesEngineUser> users;
     @Id
     private UUID roleId;
     private String roleName;
