@@ -13,6 +13,6 @@ public interface UserMapper {
     @Mapping(target = "role", source = "role",ignore=true)
     @Mapping(target = "password", source = "password",ignore=true)
     RulesEngineUser fromUserDTO(RequestUserDTO requestUserDTO);
-    @Mapping(target = "role", expression = "java(shopUser.getRole().getRoleName())")
-    ResponseUserDTO fromUserToResponseUserDTO(RulesEngineUser user);
+    @Mapping(target = "role", expression = "java(rulesEngineUser.getRole().getRoleName())")
+    ResponseUserDTO fromUserToResponseUserDTO(RulesEngineUser rulesEngineUser);
 }

@@ -14,6 +14,7 @@ import javax.validation.constraints.NotNull;
 public class RequestUserDTO {
 
     private String name;
+    private String lastName;
     private String email;
 
     @NotBlank(message = "The password of a user can't be blank")

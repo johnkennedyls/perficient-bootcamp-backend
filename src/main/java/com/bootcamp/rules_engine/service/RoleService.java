@@ -57,6 +57,7 @@ public class RoleService {
                                 HttpStatus.NOT_FOUND,
                                 new DetailBuilder(ErrorCode.ERR_404, "Role", "name", roleName)
                         )
+                )
         );
     }
     public List<RoleDTO> getAllRoles() {

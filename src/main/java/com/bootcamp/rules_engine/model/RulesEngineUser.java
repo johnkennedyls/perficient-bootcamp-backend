@@ -15,6 +15,7 @@ public class RulesEngineUser {
     @Id
     private UUID userId;
     private String name;
+    private String lastName;
     @Column(unique=true)
     private String email;
     private String password;
