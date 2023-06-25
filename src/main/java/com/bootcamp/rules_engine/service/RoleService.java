@@ -7,6 +7,7 @@ import com.bootcamp.rules_engine.error.exception.DetailBuilder;
 import com.bootcamp.rules_engine.mapper.RoleMapper;
 import com.bootcamp.rules_engine.model.Role;
 import com.bootcamp.rules_engine.repository.RoleRepository;
+import com.bootcamp.rules_engine.security.RulesEngineSecurityContext;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -63,5 +64,5 @@ public class RoleService {
                 .stream()
                 .map(roleMapper::fromRoleToRoleDTO)
                 .collect(Collectors.toList());
-    }*/
+    }
 }
