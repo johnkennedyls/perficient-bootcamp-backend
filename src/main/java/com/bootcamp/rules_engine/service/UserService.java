@@ -3,6 +3,7 @@ package com.bootcamp.rules_engine.service;
 import com.bootcamp.rules_engine.dto.request.RequestUserDTO;
 import com.bootcamp.rules_engine.dto.response.ResponseUserDTO;
 import com.bootcamp.rules_engine.enums.ErrorCode;
+import com.bootcamp.rules_engine.enums.UserRole;
 import com.bootcamp.rules_engine.error.exception.DetailBuilder;
 import com.bootcamp.rules_engine.mapper.UserMapper;
 import com.bootcamp.rules_engine.model.Role;
@@ -37,7 +38,7 @@ public class UserService {
                 )
         );
 
-//        checkPermissionsToAssignRole(requestUserDTO.getRole());
+        checkPermissionsToAssignRole(requestUserDTO.getRole());
         validateIfEmailIsDuplicated(requestUserDTO.getEmail());
         RulesEngineUser rulesEngineUser = userMapper.fromUserDTO(requestUserDTO);
         rulesEngineUser.setUserId(UUID.randomUUID());
@@ -72,6 +73,16 @@ public class UserService {
                     "A user with the entered email already exists.",
                     HttpStatus.CONFLICT,
                     new DetailBuilder(ErrorCode.ERR_DUPLICATED, "user", "email", userEmail)
+            ).get();
+        }
+    }
+
+    public void checkPermissionsToAssignRole(String roleToAssign) {
+        if (roleToAssign.equals(UserRole.ADMIN.getRole())) {
+            throw createRulesEngineException(
+                    "Only an ADMIN user can assign roles.",
+                    HttpStatus.FORBIDDEN,
+                    new DetailBuilder(ErrorCode.ERR_403)
             ).get();
         }
     }
