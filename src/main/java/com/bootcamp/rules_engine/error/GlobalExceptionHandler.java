@@ -11,10 +11,11 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import static com.bootcamp.rules_engine.error.util.RulesEngineExceptionBuilder.createRulesEngineError;
-
+@ControllerAdvice
 public class GlobalExceptionHandler {
     @ExceptionHandler(value = RulesEngineException.class)
     public ResponseEntity<RulesEngineError> handleAccountSystemException(RulesEngineException icesiException){
