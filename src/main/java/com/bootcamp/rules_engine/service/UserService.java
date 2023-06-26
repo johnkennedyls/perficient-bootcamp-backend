@@ -10,6 +10,8 @@ import com.bootcamp.rules_engine.model.Role;
 import com.bootcamp.rules_engine.model.RulesEngineUser;
 import com.bootcamp.rules_engine.repository.RoleRepository;
 import com.bootcamp.rules_engine.repository.UserRepository;
+import com.bootcamp.rules_engine.security.RulesEngineSecurityContext;
+import com.nimbusds.jose.proc.SecurityContext;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -30,6 +32,7 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
 
     public ResponseUserDTO saveUser(RequestUserDTO requestUserDTO) {
+        checkPermissions();
         Role role = roleRepository.findByName(requestUserDTO.getRole()).orElseThrow(
                 createRulesEngineException(
                         "The role with the specified name does not exists.",
@@ -37,8 +40,6 @@ public class UserService {
                         new DetailBuilder(ErrorCode.ERR_404, "Role", "name", requestUserDTO.getRole())
                 )
         );
-
-        checkPermissionsToAssignRole(requestUserDTO.getRole());
         validateIfEmailIsDuplicated(requestUserDTO.getEmail());
         RulesEngineUser rulesEngineUser = userMapper.fromUserDTO(requestUserDTO);
         rulesEngineUser.setUserId(UUID.randomUUID());
@@ -77,10 +78,10 @@ public class UserService {
         }
     }
 
-    public void checkPermissionsToAssignRole(String roleToAssign) {
-        if (roleToAssign.equals(UserRole.ADMIN.getRole())) {
+    public void checkPermissions() {
+        if (!RulesEngineSecurityContext.getCurrentUserRole().equals(UserRole.ADMIN.getRole())) {
             throw createRulesEngineException(
-                    "Only an ADMIN user can assign roles.",
+                    "Only an ADMIN user can create users.",
                     HttpStatus.FORBIDDEN,
                     new DetailBuilder(ErrorCode.ERR_403)
             ).get();
