@@ -20,7 +20,8 @@ public class RequestUserDTO {
     @NotBlank(message = "The password of a user can't be blank")
     @NotNull(message = "The password of a user can't be null")
     private String password;
-
+    @NotBlank(message = "The role of a user can't be blank")
+    @NotNull(message = "The role of a user can't be null")
     private String role;
 
 }
