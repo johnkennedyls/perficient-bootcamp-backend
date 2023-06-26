@@ -1,8 +1,13 @@
 package com.bootcamp.rules_engine.unit.service;
 
+import com.bootcamp.rules_engine.dto.request.RoleDTO;
+import com.bootcamp.rules_engine.error.exception.RulesEngineException;
 import com.bootcamp.rules_engine.mapper.RoleMapper;
+import com.bootcamp.rules_engine.mapper.RoleMapperImpl;
+import com.bootcamp.rules_engine.model.Role;
 import com.bootcamp.rules_engine.repository.RoleRepository;
 import com.bootcamp.rules_engine.service.RoleService;
+import com.bootcamp.rules_engine.unit.service.matcher.RoleMatcher;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -15,7 +20,7 @@ import static org.mockito.ArgumentMatchers.argThat;
 import static org.mockito.Mockito.*;
 
 public class RoleServiceTest {
-    /*private RoleService roleService;
+    private RoleService roleService;
     private RoleRepository roleRepository;
     private RoleMapper roleMapper;
 
@@ -36,8 +41,8 @@ public class RoleServiceTest {
         roleService.saveRole(roleDTO);
         // Assert
         Role newRole = Role.builder()
-                .description("Este rol puede acceder a la creacion de items y manejo de pedidos de la tienda (cambiar los estados)")
-                .roleName("SHOP")
+                .description("Role for a person")
+                .roleName("MANAGER")
                 .build();
         verify(roleRepository,times(1)).save(argThat(new RoleMatcher(newRole)));
         verify(roleMapper, times(1)).fromRoleDTO(any());
@@ -56,7 +61,7 @@ public class RoleServiceTest {
             // Act
             roleService.saveRole(roleDTO);
             fail();
-        } catch (CellphoneException exception){
+        } catch (RulesEngineException exception){
             String message = exception.getMessage();
             var error = exception.getError();
             var details = error.getDetails();
@@ -64,23 +69,23 @@ public class RoleServiceTest {
             var detail = details.get(0);
             // Assert
             assertEquals("ERR_DUPLICATED", detail.getErrorCode(), "Code doesn't match");
-            assertEquals("SHOP, already exists.", detail.getErrorMessage(), "Error message doesn't match");
+            assertEquals("Resource Role with field name: MANAGER, already exists.", detail.getErrorMessage(), "Error message doesn't match");
             assertEquals("Another role already has this name.", message);
         }
     }
 
     private RoleDTO defaultRoleDTO() {
         return RoleDTO.builder()
-                .description("Este rol puede acceder a la creacion de items y manejo de pedidos de la tienda (cambiar los estados)")
-                .roleName("SHOP")
+                .description("Role for a person")
+                .roleName("MANAGER")
                 .build();
     }
 
     private Role defaultRole() {
         return Role.builder()
                 .roleId(UUID.randomUUID())
-                .description("Este rol puede acceder a la creacion de items y manejo de pedidos de la tienda (cambiar los estados)")
-                .roleName("SHOP")
+                .description("Role for a person")
+                .roleName("MANAGER")
                 .build();
-    }*/
+    }
 }
