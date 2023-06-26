@@ -80,9 +80,11 @@ public class SecurityConfiguration {
                 .add(permitAll, (context, other) -> new AuthorizationDecision(true))
                 .add(permitAllSignUp, (context, other) -> new AuthorizationDecision(true));
 
-//        managerBuilder.add(new MvcRequestMatcher(introspector, "/roles/**"),
-//                AuthorityAuthorizationManager.hasAnyAuthority("SCOPE_ADMIN"));
+        managerBuilder.add(new MvcRequestMatcher(introspector, "/roles/**"),
+               AuthorityAuthorizationManager.hasAnyAuthority("SCOPE_ADMIN"));
 
+        managerBuilder.add(new MvcRequestMatcher(introspector, "/users/**"),
+                AuthorityAuthorizationManager.hasAnyAuthority("SCOPE_ADMIN"));
 
 
         AuthorizationManager<HttpServletRequest> manager = managerBuilder.build();

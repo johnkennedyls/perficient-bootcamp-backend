@@ -45,7 +45,7 @@ public class UserControllerTest {
         var result = mockMvc.perform(MockMvcRequestBuilders.post("/users/create").content(
                                 objectMapper.writeValueAsString(
                                         RequestUserDTO.builder()
-                                                .email("luis@gmail.com")
+                                                .email("luis09@gmail.com")
                                                 .name("Luis")
                                                 .lastName("Alvarez")
                                                 .password("password")
@@ -129,7 +129,7 @@ public class UserControllerTest {
                                                 .name("Luis")
                                                 .lastName("Alvarez")
                                                 .password("password")
-                                                .role("MANAGER")
+                                                .role("USER")
                                                 .build()
                                 ))
                         .header("Authorization", "Bearer "+token.getToken())
