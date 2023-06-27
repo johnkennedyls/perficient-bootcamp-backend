@@ -24,15 +24,13 @@ public class TableDataService {
 
     public TableDataDTO saveTable(TableDataDTO tableData, List<String[]> rows) {
         checkPermissions();
-        // Get the headers (first row)
-        String[] headers = rows.get(1);
 
+        String[] headers = rows.get(1);
         List<String> types = Arrays.asList(rows.get(0));
 
-        // Remove the headers from the rows list
         rows.remove(0);
+        rows.remove(1);
 
-        // Build the object
         TableData newTableData = TableData.builder()
                 .tableId(UUID.randomUUID())
                 .headers(headers)
