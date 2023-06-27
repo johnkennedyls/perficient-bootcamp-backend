@@ -33,12 +33,6 @@ public class TestConfigurationData {
                 .description("Investigador: usuario que solo crea reglas.")
                 .build();
 
-        Role editorRole = Role.builder()
-                .roleId(UUID.randomUUID())
-                .roleName(UserRole.EDITOR.getRole())
-                .description("Editor: usuario que solo ingresa registros (llena filas de las tablas).")
-                .build();
-
         RulesEngineUser adminUser = RulesEngineUser.builder()
                 .userId(UUID.randomUUID())
                 .name("Laura Daniela")
@@ -66,24 +60,13 @@ public class TestConfigurationData {
                 .role(researcherRole)
                 .build();
 
-        RulesEngineUser editorUser = RulesEngineUser.builder()
-                .userId(UUID.randomUUID())
-                .name("Sara")
-                .lastName("Alvarez Ordonez")
-                .email("sara@gmail.com")
-                .password(passwordEncoder.encode("password"))
-                .role(researcherRole)
-                .build();
-
         return args -> {
             roleRepository.save(adminRole);
             roleRepository.save(consultantRole);
             roleRepository.save(researcherRole);
-            roleRepository.save(editorRole);
             userRepository.save(adminUser);
             userRepository.save(consultantUser);
             userRepository.save(researcherUser);
-            userRepository.save(editorUser);
         };
     }
 }
