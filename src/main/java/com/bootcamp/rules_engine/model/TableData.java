@@ -14,8 +14,9 @@ import java.util.UUID;
 public class TableData {
     @Id
     private UUID tableId;
+    private String name;
     @Transient
-    private String[] headers;
+    private List<String> headers;
     @Transient
     private List<String[]> rows;
     @ElementCollection

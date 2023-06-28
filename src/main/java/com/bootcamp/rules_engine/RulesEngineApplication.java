@@ -20,7 +20,7 @@ public class RulesEngineApplication {
 		SpringApplication.run(RulesEngineApplication.class, args);
 	}
 
-//	@Bean
+    @Bean
     CommandLineRunner commandLineRunner(RoleRepository roleRepository, UserRepository userRepository, PasswordEncoder passwordEncoder){
         Role adminRole = Role.builder()
                 .roleId(UUID.randomUUID())
