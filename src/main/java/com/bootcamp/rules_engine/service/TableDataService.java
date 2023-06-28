@@ -26,7 +26,7 @@ public class TableDataService {
     private final TableDataRepository tableDataRepository;
 
     public void saveTable(List<String[]> rows, String originalFilename) {
-        checkPermissions();
+//        checkPermissions();
 
         List<String> headers = Arrays.asList(rows.get(1));
         List<String> types = Arrays.asList(rows.get(0));
@@ -34,7 +34,7 @@ public class TableDataService {
         rows.remove(0);
         rows.remove(1);
 
-        String[] nameParts = originalFilename.split(".");
+        String[] nameParts = originalFilename.split("\\.");
 
         TableData newTableData = TableData.builder()
                 .tableId(UUID.randomUUID())
@@ -92,15 +92,15 @@ public class TableDataService {
 
     public void addRowToDatabase(String[] row, TableData table) {
         StringBuilder queryBuilder = new StringBuilder("INSERT INTO ")
-                .append(table.getName())
-                .append(" (");
-
-        StringJoiner columnJoiner = new StringJoiner(", ");
-
-        table.getHeaders().forEach(columnJoiner::add);
-
-        queryBuilder.append(columnJoiner)
-                .append(") VALUES (");
+                .append(table.getName()).append(" VALUES (");
+//                .append(" (");
+//
+//        StringJoiner columnJoiner = new StringJoiner(", ");
+//
+//        table.getHeaders().forEach(columnJoiner::add);
+//
+//        queryBuilder.append(columnJoiner)
+//                .append(") VALUES (");
 
         List<String> values = Arrays.stream(row)
                 .map(value -> {
@@ -116,7 +116,7 @@ public class TableDataService {
         values.forEach(valueJoiner::add);
 
         queryBuilder.append(valueJoiner)
-                .append(")");
+                .append(");");
 
         String query = queryBuilder.toString();
         jdbcTemplate.update(query);
