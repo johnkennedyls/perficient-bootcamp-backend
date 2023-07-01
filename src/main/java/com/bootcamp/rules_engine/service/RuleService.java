@@ -15,6 +15,7 @@ import com.bootcamp.rules_engine.error.exception.DetailBuilder;
 import com.bootcamp.rules_engine.mapper.RuleMapper;
 import com.bootcamp.rules_engine.model.Rule;
 import com.bootcamp.rules_engine.repository.RuleRepository;
+import com.bootcamp.rules_engine.repository.TableDataRepository;
 import com.bootcamp.rules_engine.security.RulesEngineSecurityContext;
 
 import static com.bootcamp.rules_engine.error.util.RulesEngineExceptionBuilder.createRulesEngineException;
@@ -63,9 +64,8 @@ public class RuleService{
                 .collect(Collectors.toList());
     }
 
-    public boolean evaluateRule(String ruleName) {
+    public boolean evaluateRule(String ruleName, String[] headers, String[] row) {
         String expression= getRule(ruleName).getRule();
-
         String[] elements = expression.split(" ");
         Stack<String> stack = new Stack<>();
         Stack<String> operatorStack = new Stack<>();
@@ -93,6 +93,14 @@ public class RuleService{
                 operatorStack.push(element);
             } else {                
                 //TODO Reemplazar valores del registro de la tabla
+
+                if(!(isBoolean(element) || isNumber(element))){
+                    int columnPosition = isColumn(element, headers);
+                    if(columnPosition != -1){
+                        element = row[columnPosition];
+                    }
+                }
+
                 stack.push(element);
             }
         }
@@ -185,6 +193,17 @@ public class RuleService{
         } catch (NumberFormatException e) {
         return false;
         }
+    }
+
+    public int isColumn(String element, String[] headers){
+        int result=-1;
+        for (int i=0;i < headers.length;i++) {
+            if(element.equals(headers[i])){
+                result = i;
+                break;
+            }
+        }
+        return result;
     }
 
     public void checkPermissions() {
