@@ -22,11 +22,11 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(icesiException.getError().getStatus()).body(icesiException.getError());
     }
 
-    /*@ExceptionHandler(RuntimeException.class)
+    @ExceptionHandler(RuntimeException.class)
     public ResponseEntity<RulesEngineError> handleRuntimeException(RuntimeException runtimeException){
         var error = createRulesEngineError(runtimeException.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR, new DetailBuilder(ErrorCode.ERR_500));
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
-    }*/
+    }
 
     @ExceptionHandler(BadCredentialsException.class)
     public ResponseEntity<RulesEngineError> handleBadCredentialsException(BadCredentialsException exception){

@@ -26,7 +26,7 @@ public class TableDataService {
     private final TableDataRepository tableDataRepository;
 
     public void saveTable(List<String[]> rows, String originalFilename) {
-//        checkPermissions();
+        checkPermissions();
 
         List<String> headers = Arrays.asList(rows.get(1));
         List<String> types = Arrays.asList(rows.get(0));
@@ -39,6 +39,7 @@ public class TableDataService {
         TableData newTableData = TableData.builder()
                 .tableId(UUID.randomUUID())
                 .name(nameParts[0])
+                .ownerEmail(RulesEngineSecurityContext.getCurrentUserEmail())
                 .headers(headers)
                 .rows(rows)
                 .types(types)

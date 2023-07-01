@@ -86,6 +86,9 @@ public class SecurityConfiguration {
         managerBuilder.add(new MvcRequestMatcher(introspector, "/users/**"),
                 AuthorityAuthorizationManager.hasAnyAuthority("SCOPE_ADMIN"));
 
+        managerBuilder.add(new MvcRequestMatcher(introspector, "/tables/**"),
+                AuthorityAuthorizationManager.hasAnyAuthority("SCOPE_RESEARCHER"));
+
         AuthorizationManager<HttpServletRequest> manager = managerBuilder.build();
         return (authentication, object) -> manager.check(authentication, object.getRequest());
     }
