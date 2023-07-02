@@ -1,0 +1,102 @@
+text;text;text;text;number;number;boolean
+modelo;tipo_de_producto;categoria;marca;unidades;precio;garantia
+Aerified;Plastic;Accesorio;Buick;92;1961731;true
+A21;Wood;Accesorio;Land Rover;72;2485913;false
+A20;Plastic;Equipo electronico;Honda;76;972578;false
+XS;Wood;Equipo electronico;BMW;51;746349;false
+Go pro;Steel;Accesorio;Mitsubishi;135;1549817;false
+Power;Wood;Equipo electronico;Mercedes-Benz;62;1764266;true
+Fire;Plexiglass;Accesorio;Chevrolet;116;544841;false
+Alpha;Rubber;Accesorio;GMC;80;2751178;false
+Brownie;Aluminum;Equipo electronico;Chrysler;95;263824;false
+Light;Wood;Accesorio;Hyundai;123;1971909;false
+J5;Brass;Accesorio;Kia;63;504691;true
+Alpha4444;Granite;Equipo electronico;Saab;78;1857093;true
+J7;Plexiglass;Equipo electronico;Jaguar;134;2719286;false
+a7;Wood;Equipo electronico;Ford;61;524040;false
+Dragon;Glass;Accesorio;Mercedes-Benz;72;1814339;true
+G20;Glass;Equipo electronico;Lotus;31;921865;false
+Future;Rubber;Equipo electronico;GMC;115;1519243;true
+Darkness;Plastic;Accesorio;Mercedes-Benz;64;1559461;false
+Life;Plastic;Accesorio;Saab;142;158726;true
+Free;Steel;Equipo electronico;Acura;91;1482359;true
+Strong;Stone;Accesorio;Chevrolet;31;2882428;false
+Fierce;Vinyl;Accesorio;Chevrolet;68;13512;true
+Alphazap;Plexiglass;Accesorio;Buick;14;2284478;false
+Andalax;Vinyl;Equipo electronico;Ford;42;481353;true
+Asoka;Wood;Accesorio;Dodge;77;1756952;false
+Bamity;Granite;Accesorio;Geo;19;587013;true
+Bigtax;Plastic;Accesorio;Chrysler;20;2271115;true
+Biodex;Granite;Equipo electronico;Lotus;139;827965;false
+Bitchip;Plastic;Accesorio;Chevrolet;116;2220253;true
+Bitwolf;Stone;Accesorio;Land Rover;21;766574;false
+Bytecard;Aluminum;Accesorio;Jaguar;18;979932;false
+Cardguard;Granite;Accesorio;Chevrolet;13;2585408;true
+Cardify;Steel;Equipo electronico;Honda;73;866784;true
+Cookley;Vinyl;Accesorio;Saturn;25;2812029;true
+Daltfresh;Brass;Accesorio;Chrysler;100;2373121;false
+Domainer;Wood;Accesorio;Volkswagen;99;2033282;false
+Duobam;Plastic;Equipo electronico;Honda;41;1564323;false
+Fintone;Brass;Accesorio;Nissan;92;219418;false
+Fix San;Plastic;Accesorio;Chevrolet;21;2251581;true
+Fixflex;Aluminum;Equipo electronico;Dodge;126;1160510;true
+Flexidy;Granite;Equipo electronico;Ford;58;1387630;true
+Flowdesk;Vinyl;Accesorio;Chevrolet;135;1163449;true
+Gembucket;Wood;Accesorio;Honda;112;587130;false
+Greenlam;Vinyl;Accesorio;Pontiac;99;1765854;false
+Hatity;Aluminum;Equipo electronico;Volvo;41;1838885;false
+Holdlamis;Stone;Accesorio;GMC;35;50530;false
+Home Ing;Brass;Accesorio;Mazda;41;311651;true
+It;Rubber;Accesorio;BMW;84;140040;true
+Job;Granite;Equipo electronico;Isuzu;150;1443478;true
+Kanlam;Wood;Accesorio;GMC;144;1711137;false
+Keylex;Plexiglass;Accesorio;Mercedes-Benz;147;790348;true
+Konklab;Aluminum;Accesorio;Land Rover;15;2473616;true
+Konklux;Granite;Equipo electronico;Chevrolet;90;2419957;false
+Latlux;Steel;Accesorio;Nissan;11;627921;false
+Lotlux;Vinyl;Equipo electronico;Volkswagen;129;2470775;false
+Lotstring;Plexiglass;Accesorio;Buick;15;2703975;true
+Mat Lam Tam;Granite;Accesorio;Suzuki;110;2934933;true
+Matsoft;Glass;Equipo electronico;Subaru;53;327556;false
+Namfix;Vinyl;Accesorio;Pontiac;117;2891929;false
+Opela;Vinyl;Accesorio;Mazda;79;168235;true
+Otcom;Plexiglass;Accesorio;Saab;108;867785;false
+Overhold;Plexiglass;Equipo electronico;Audi;117;1703733;true
+Pannier;Brass;Equipo electronico;Chevrolet;126;1931948;false
+Prodder;Glass;Equipo electronico;Ford;123;177841;false
+Quo Lux;Plexiglass;Accesorio;Chrysler;97;2840065;true
+Rank;Plastic;Accesorio;Chrysler;31;833976;false
+Redhold;Plexiglass;Accesorio;Isuzu;58;1143767;true
+Regrant;Wood;Accesorio;Dodge;27;2686193;true
+Ronstring;Granite;Equipo electronico;Mitsubishi;72;689063;false
+Solarbreeze;Aluminum;Accesorio;Ford;86;151575;false
+Sonair;Stone;Accesorio;Saturn;148;219491;true
+Sontrueng;Plexiglass;Accesorio;Lincoln;90;2159830;false
+Span;Plastic;Accesorio;Nissan;20;245003;true
+Stim;Wood;Accesorio;Audi;43;108699;false
+Stringtough;Rubber;Accesorio;Lincoln;134;1008070;true
+Stronghold;Plastic;Accesorio;Mitsubishi;108;2715431;true
+Sub-Ex;Steel;Accesorio;Nissan;69;1397617;true
+Subin;Brass;Equipo electronico;Chevrolet;52;443092;false
+Tampflex;Aluminum;Accesorio;Ford;119;683928;true
+Temp;Aluminum;Accesorio;Acura;99;1165883;false
+Tempsoft;Wood;Equipo electronico;Honda;33;576366;false
+Tin;Steel;Accesorio;Chrysler;26;374228;true
+Toughjoyfax;Wood;Accesorio;Ford;101;173504;true
+Transcof;Aluminum;Equipo electronico;Suzuki;122;924437;true
+Treeflex;Brass;Equipo electronico;Volvo;126;1963462;true
+Tresom;Steel;Accesorio;Volkswagen;30;1633866;true
+Tres-Zap;Steel;Equipo electronico;Kia;124;1279486;false
+Trippledex;Vinyl;Equipo electronico;Dodge;34;1792952;true
+Vagram;Wood;Equipo electronico;Mercury;150;2059542;true
+Ventosanzap;Vinyl;Accesorio;Chevrolet;61;1920414;false
+Veribet;Steel;Equipo electronico;Lexus;127;473037;true
+Viva;Steel;Accesorio;Mercedes-Benz;136;1102976;true
+Volttruellam;Plastic;Accesorio;GMC;112;910735;true
+Voyatouch;Plexiglass;Accesorio;Chevrolet;84;1712079;true
+Wrapsafe;Glass;Accesorio;Mazda;120;2520275;true
+Y-find;Steel;Equipo electronico;Kia;101;2652206;true
+Y-Solowarm;Glass;Accesorio;Mazda;98;1442966;false
+Zaam-Dox;Brass;Accesorio;Chevrolet;105;2273130;true
+Zamit;Wood;Accesorio;Chevrolet;20;2388503;false
+Zathin;Stone;Equipo electronico;Honda;31;2412063;true

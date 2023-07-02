@@ -27,19 +27,20 @@ public class TableDataService {
     private final TableDataRepository tableDataRepository;
 
     public void saveTable(List<String[]> rows, String originalFilename) {
-//        checkPermissions();
+        checkPermissions();
 
         List<String> headers = Arrays.asList(rows.get(1));
         List<String> types = Arrays.asList(rows.get(0));
 
         rows.remove(0);
-        rows.remove(1);
+        rows.remove(0);
 
         String[] nameParts = originalFilename.split("\\.");
 
         TableData newTableData = TableData.builder()
                 .tableId(UUID.randomUUID())
                 .name(nameParts[0])
+                .ownerEmail(RulesEngineSecurityContext.getCurrentUserEmail())
                 .headers(headers)
                 .rows(rows)
                 .types(types)
@@ -101,20 +102,20 @@ public class TableDataService {
 
     public void addRowToDatabase(String[] row, TableData table) {
         StringBuilder queryBuilder = new StringBuilder("INSERT INTO ")
-                .append(table.getName()).append(" VALUES (");
-//                .append(" (");
-//
-//        StringJoiner columnJoiner = new StringJoiner(", ");
-//
-//        table.getHeaders().forEach(columnJoiner::add);
-//
-//        queryBuilder.append(columnJoiner)
-//                .append(") VALUES (");
+                .append(table.getName())
+                .append(" (");
+
+        StringJoiner columnJoiner = new StringJoiner(", ");
+
+        table.getHeaders().forEach(columnJoiner::add);
+
+        queryBuilder.append(columnJoiner)
+                .append(") VALUES (");
 
         List<String> values = Arrays.stream(row)
                 .map(value -> {
-                    if (isNumeric(value) && value.startsWith("\"") && value.endsWith("\"")) {
-                        return value.substring(1, value.length() - 1);
+                    if (!isNumeric(value)) {
+                        return "'" + value + "'";
                     }
                     return value;
                 })

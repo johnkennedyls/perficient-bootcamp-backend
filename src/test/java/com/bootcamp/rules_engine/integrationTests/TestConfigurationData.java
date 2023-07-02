@@ -13,7 +13,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import java.util.UUID;
 @TestConfiguration
 public class TestConfigurationData {
-   // @Bean
+    //@Bean
     CommandLineRunner commandLineRunner(RoleRepository roleRepository, UserRepository userRepository, PasswordEncoder passwordEncoder){
         Role adminRole = Role.builder()
                 .roleId(UUID.randomUUID())

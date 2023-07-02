@@ -16,6 +16,7 @@ public class TableData {
     @Id
     private UUID tableId;
     private String name;
+    private String ownerEmail;
     @Transient
     private List<String> headers;
     @Transient

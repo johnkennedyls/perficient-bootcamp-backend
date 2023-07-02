@@ -17,6 +17,7 @@ public class RulesEngineApplication {
 		SpringApplication.run(RulesEngineApplication.class, args);
 	}
 
+
 //   @Bean
     /**
      *  CommandLineRunner commandLineRunner(RoleRepository roleRepository, UserRepository userRepository, PasswordEncoder passwordEncoder){
@@ -74,5 +75,6 @@ public class RulesEngineApplication {
      *             userRepository.save(researcherUser);
      *         };
      */
+
     }
 
