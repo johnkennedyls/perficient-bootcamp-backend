@@ -36,6 +36,6 @@ public class RuleController implements RuleAPI{
 
     @Override
     public boolean evaluateRule(String ruleName) {
-        return this.ruleService.evaluateRule(ruleName);
+        return this.ruleService.evaluateRule(ruleName, null, null);
     }
 }
