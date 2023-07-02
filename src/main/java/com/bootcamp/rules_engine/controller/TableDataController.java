@@ -6,6 +6,9 @@ import com.bootcamp.rules_engine.enums.ErrorCode;
 import com.bootcamp.rules_engine.error.exception.DetailBuilder;
 import com.bootcamp.rules_engine.model.TableData;
 import com.bootcamp.rules_engine.service.TableDataService;
+import com.opencsv.CSVParser;
+import com.opencsv.CSVParserBuilder;
+import com.opencsv.CSVReaderBuilder;
 import com.opencsv.exceptions.CsvException;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -20,12 +23,9 @@ import com.opencsv.CSVReader;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.Arrays;
 import java.util.List;
-import java.util.UUID;
 
 import static com.bootcamp.rules_engine.api.TableDataAPI.BASE_TABLE_URL;
-import static com.bootcamp.rules_engine.api.UserAPI.BASE_USER_URL;
 import static com.bootcamp.rules_engine.error.util.RulesEngineExceptionBuilder.createRulesEngineException;
 
 @RestController
@@ -35,15 +35,23 @@ public class TableDataController implements TableDataAPI {
     private final TableDataService tableDataService;
 
     @Override
-    public TableDataDTO createTable (TableDataDTO tableDataDTO) {
+    public void createTable (MultipartFile file) {
         try {
+            // Create a CSVParser to separate the data
+            CSVParser parser = new CSVParserBuilder()
+                    .withSeparator(';')
+                    .withIgnoreQuotations(true)
+                    .build();
+
             // Create a CSVReader with the uploaded CSV file
-            CSVReader csvReader = new CSVReader(new InputStreamReader(tableDataDTO.getFile().getInputStream()));
+            CSVReader csvReader = new CSVReaderBuilder(new InputStreamReader(file.getInputStream()))
+                    .withCSVParser(parser)
+                    .build();
 
             // Parse the CSV data
             List<String[]> rows = csvReader.readAll();
 
-            return tableDataService.saveTable(tableDataDTO, rows);
+            tableDataService.saveTable(rows, file.getOriginalFilename());
 
         } catch (IOException e) {
             e.printStackTrace();
