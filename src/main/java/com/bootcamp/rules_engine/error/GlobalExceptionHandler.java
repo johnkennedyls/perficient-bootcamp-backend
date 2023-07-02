@@ -1,10 +1,7 @@
 package com.bootcamp.rules_engine.error;
 
 import com.bootcamp.rules_engine.enums.ErrorCode;
-import com.bootcamp.rules_engine.error.exception.DetailBuilder;
-import com.bootcamp.rules_engine.error.exception.RulesEngineError;
-import com.bootcamp.rules_engine.error.exception.RulesEngineErrorDetail;
-import com.bootcamp.rules_engine.error.exception.RulesEngineException;
+import com.bootcamp.rules_engine.error.exception.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -13,6 +10,8 @@ import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+
+import java.util.Collections;
 
 import static com.bootcamp.rules_engine.error.util.RulesEngineExceptionBuilder.createRulesEngineError;
 @ControllerAdvice
@@ -42,7 +41,20 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(error.getStatus()).body(error);
     }
 
-    private RulesEngineErrorDetail mapBindingResultToError(ObjectError objectError){
+    @ExceptionHandler(ColumnNameException.class)
+    public ResponseEntity<RulesEngineErrorDetail> handleColumnNameException(ColumnNameException ex) {
+        RulesEngineErrorDetail errorDetail = new RulesEngineErrorDetail(ex.getMessage(), "ERR_COLUMN_NAME");
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorDetail);
+    }
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<RulesEngineErrorDetail> handleException(Exception ex) {
+        RulesEngineErrorDetail errorDetail = new RulesEngineErrorDetail("Internal Server Error", "ERR_500");
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorDetail);
+    }
+
+
+private RulesEngineErrorDetail mapBindingResultToError(ObjectError objectError){
         var message = ErrorCode.ERR_400.getMessage().formatted(((FieldError) objectError).getField(), objectError.getDefaultMessage());
         return RulesEngineErrorDetail.builder()
                 .errorCode(ErrorCode.ERR_400.getCode())

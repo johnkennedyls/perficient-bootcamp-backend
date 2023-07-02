@@ -3,6 +3,7 @@ package com.bootcamp.rules_engine.service;
 import com.bootcamp.rules_engine.dto.request.TableDataDTO;
 import com.bootcamp.rules_engine.enums.ErrorCode;
 import com.bootcamp.rules_engine.enums.UserRole;
+import com.bootcamp.rules_engine.error.exception.ColumnNameException;
 import com.bootcamp.rules_engine.error.exception.DetailBuilder;
 import com.bootcamp.rules_engine.model.TableData;
 import com.bootcamp.rules_engine.repository.TableDataRepository;
@@ -48,6 +49,7 @@ public class TableDataService {
     }
 
     public void createTableInDatabase(TableData newTableData) {
+        validateColumnNames(newTableData.getHeaders());
         StringBuilder queryBuilder = new StringBuilder("CREATE TABLE ")
                 .append(newTableData.getName())
                 .append("(");
@@ -88,6 +90,13 @@ public class TableDataService {
         String query = queryBuilder.toString();
         jdbcTemplate.execute(query);
         newTableData.getRows().forEach(row -> addRowToDatabase(row, newTableData));
+    }
+    private void validateColumnNames(List<String> headers) {
+        for (String columnName : headers) {
+            if (columnName.contains(" ")) {
+                throw new ColumnNameException("Column name cannot contain spaces: " + columnName);
+            }
+        }
     }
 
     public void addRowToDatabase(String[] row, TableData table) {
