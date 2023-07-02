@@ -5,6 +5,7 @@ import lombok.*;
 import javax.persistence.*;
 import java.util.List;
 import java.util.UUID;
+
 @Getter
 @Setter
 @AllArgsConstructor
@@ -14,8 +15,10 @@ import java.util.UUID;
 public class TableData {
     @Id
     private UUID tableId;
+    private String name;
+    private String ownerEmail;
     @Transient
-    private String[] headers;
+    private List<String> headers;
     @Transient
     private List<String[]> rows;
     @ElementCollection

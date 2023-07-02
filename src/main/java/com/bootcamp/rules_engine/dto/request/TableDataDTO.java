@@ -10,5 +10,4 @@ import org.springframework.web.multipart.MultipartFile;
 @NoArgsConstructor
 public class TableDataDTO {
     private MultipartFile file;
-    private String message;
 }
