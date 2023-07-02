@@ -53,8 +53,14 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorDetail);
     }
 
+    @ExceptionHandler(InvalidTableDataException.class)
+    public ResponseEntity<RulesEngineErrorDetail> handleColumnNameException(InvalidTableDataException ex) {
+        RulesEngineErrorDetail errorDetail = new RulesEngineErrorDetail(ex.getMessage(), "ERR_INVALID_TABLE_DATA");
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorDetail);
+    }
 
-private RulesEngineErrorDetail mapBindingResultToError(ObjectError objectError){
+
+    private RulesEngineErrorDetail mapBindingResultToError(ObjectError objectError){
         var message = ErrorCode.ERR_400.getMessage().formatted(((FieldError) objectError).getField(), objectError.getDefaultMessage());
         return RulesEngineErrorDetail.builder()
                 .errorCode(ErrorCode.ERR_400.getCode())

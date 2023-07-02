@@ -5,6 +5,7 @@ import com.bootcamp.rules_engine.enums.ErrorCode;
 import com.bootcamp.rules_engine.enums.UserRole;
 import com.bootcamp.rules_engine.error.exception.ColumnNameException;
 import com.bootcamp.rules_engine.error.exception.DetailBuilder;
+import com.bootcamp.rules_engine.error.exception.InvalidTableDataException;
 import com.bootcamp.rules_engine.model.TableData;
 import com.bootcamp.rules_engine.repository.TableDataRepository;
 import com.bootcamp.rules_engine.security.RulesEngineSecurityContext;
@@ -31,7 +32,7 @@ public class TableDataService {
 
         List<String> headers = Arrays.asList(rows.get(1));
         List<String> types = Arrays.asList(rows.get(0));
-
+        validateTableData(headers, types, rows);
         rows.remove(0);
         rows.remove(0);
 
@@ -51,6 +52,7 @@ public class TableDataService {
 
     public void createTableInDatabase(TableData newTableData) {
         validateColumnNames(newTableData.getHeaders());
+
         StringBuilder queryBuilder = new StringBuilder("CREATE TABLE ")
                 .append(newTableData.getName())
                 .append("(");
@@ -92,6 +94,19 @@ public class TableDataService {
         jdbcTemplate.execute(query);
         newTableData.getRows().forEach(row -> addRowToDatabase(row, newTableData));
     }
+
+    private void validateTableData(List<String> headers, List<String> types, List<String[]> rows) {
+        if (headers.size() != types.size() || headers.size() != rows.get(0).length) {
+            throw new InvalidTableDataException("Invalid table data. Headers, types, and rows must have matching sizes.");
+        }
+
+        for (String[] row : rows) {
+            if (row.length != headers.size() || Arrays.stream(row).anyMatch(value -> value == null || value.isEmpty())) {
+                throw new InvalidTableDataException("Invalid table data. Row size does not match headers or contains null or empty values.");
+            }
+        }
+    }
+
     private void validateColumnNames(List<String> headers) {
         for (String columnName : headers) {
             if (columnName.contains(" ")) {
