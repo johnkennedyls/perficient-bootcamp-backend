@@ -22,7 +22,7 @@ public interface RuleAPI {
     RuleDTO createRule(@RequestBody @Valid RuleDTO ruleDTO);
     @GetMapping("/{name}")
     RuleDTO getRule(@PathVariable("name") String name);
-    @GetMapping("/getRoles")
+    @GetMapping("/getRules")
     List<RuleDTO> getAllRules();
 
     @GetMapping("/evaluate/register/{ruleName}/{tableName}/{rowPosition}")
@@ -36,11 +36,11 @@ public interface RuleAPI {
         @PathVariable("ruleName") String ruleName,
         @PathVariable("tableName") String tableName);
     
-    @GetMapping("/evaluate/List/{ruleName}/{tableName}/{rowPosition}")
+    @GetMapping("/evaluate/List/{ruleName}/{tableName}/{rowPositions}")
     List<Boolean> evaluateRuleToRegistersList(
         @PathVariable("ruleName") String ruleName,
         @PathVariable("tableName") String tableName,
-        @PathVariable("rowPosition") String positions);
+        @PathVariable("rowPositions") String positions);
 
     @DeleteMapping("/delete/{ruleName}")
     void deleteRule(@PathVariable("ruleName") String ruleName);

@@ -65,7 +65,7 @@ public class RuleServiceTest {
     }
 
     @Test
-    public void testCreateRoleWhenNameAlreadyExists(){
+    public void testCreateRuleWhenNameAlreadyExists(){
         // Arrange
         RuleDTO ruleDTO= defaultRuleDTO();
         Rule rule= defaultRule();

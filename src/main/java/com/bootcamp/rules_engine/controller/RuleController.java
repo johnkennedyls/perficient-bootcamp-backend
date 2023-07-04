@@ -10,13 +10,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.bootcamp.rules_engine.api.RuleAPI;
 import com.bootcamp.rules_engine.dto.request.RuleDTO;
-import com.bootcamp.rules_engine.model.Rule;
 import com.bootcamp.rules_engine.service.RuleService;
 
 import lombok.AllArgsConstructor;
 
 @RestController
-@RequestMapping("/rules")
+@RequestMapping(RuleAPI.BASE_RULE_URL)
 @AllArgsConstructor
 public class RuleController implements RuleAPI{
     

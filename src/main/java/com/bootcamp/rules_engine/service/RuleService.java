@@ -51,7 +51,6 @@ public class RuleService{
     }
 
     public RuleDTO getRule(String ruleName) {
-        checkPermissions();
         return mapper.fromRuleToRuleDTO(
                 repository.findByName(ruleName).orElseThrow(
                         createRulesEngineException(
@@ -84,12 +83,24 @@ public class RuleService{
 
     public List<Boolean> evaluateRuleToTable(String rulename, String tableName){
         List<Boolean> results = new ArrayList<Boolean>();
-        //TODO Exception
-        String expression = repository.findByName(rulename).get().getRule();
-        //TODO Exception
-        Optional<TableData> table = tableRepository.findByName(tableName);
-        List<String> headers = table.get().getHeaders();
-        List<String[]> rows = table.get().getRows();
+        Rule rule = repository.findByName(rulename).orElseThrow(
+                        createRulesEngineException(
+                                "The rule with the specified name does not exists.",
+                                HttpStatus.NOT_FOUND,
+                                new DetailBuilder(ErrorCode.ERR_404, "Rule", "name", rulename)
+                        )
+                    );
+        String expression = rule.getRule();
+        TableData table = tableRepository.findByName(tableName).orElseThrow(
+                        createRulesEngineException(
+                                "The table with the specified name does not exists.",
+                                HttpStatus.NOT_FOUND,
+                                new DetailBuilder(ErrorCode.ERR_404, "TableData", "name", tableName)
+                        )
+                    );
+
+        List<String> headers = table.getHeaders();
+        List<String[]> rows = table.getRows();
         for(String[] row : rows){
             results.add(evaluateRule(expression, headers, row));
         }
@@ -99,12 +110,23 @@ public class RuleService{
     public List<Boolean> evaluateRuleToRegistersList(String rulename, String tableName, List<Integer> rowsPosition){
         List<Boolean> results = new ArrayList<Boolean>();
         List<String[]> rowsToEvaluate = new ArrayList<String[]>();
-        //TODO Exception
-        String expression = repository.findByName(rulename).get().getRule();
-        //TODO Exception
-        Optional<TableData> table = tableRepository.findByName(tableName);
-        List<String> headers = table.get().getHeaders();
-        List<String[]> rows = table.get().getRows();
+        Rule rule = repository.findByName(rulename).orElseThrow(
+                        createRulesEngineException(
+                                "The rule with the specified name does not exists.",
+                                HttpStatus.NOT_FOUND,
+                                new DetailBuilder(ErrorCode.ERR_404, "Rule", "name", rulename)
+                        )
+                    );
+        String expression = rule.getRule();
+        TableData table = tableRepository.findByName(tableName).orElseThrow(
+                        createRulesEngineException(
+                                "The table with the specified name does not exists.",
+                                HttpStatus.NOT_FOUND,
+                                new DetailBuilder(ErrorCode.ERR_404, "TableData", "name", tableName)
+                        )
+                    );
+        List<String> headers = table.getHeaders();
+        List<String[]> rows = table.getRows();
         for(Integer elementIndex : rowsPosition){
             rowsToEvaluate.add(rows.get(elementIndex));
         }
@@ -116,12 +138,23 @@ public class RuleService{
     }
 
     public boolean evaluateRuleToRegister(String rulename, String tableName, int rowPosition){
-        //TODO Exception
-        String expression = repository.findByName(rulename).get().getRule();
-        //TODO Exception
-        Optional<TableData> table = tableRepository.findByName(tableName);
-        List<String> headers = table.get().getHeaders();
-        String[] row = table.get().getRows().get(rowPosition);
+        Rule rule = repository.findByName(rulename).orElseThrow(
+                        createRulesEngineException(
+                                "The rule with the specified name does not exists.",
+                                HttpStatus.NOT_FOUND,
+                                new DetailBuilder(ErrorCode.ERR_404, "Rule", "name", rulename)
+                        )
+                    );
+        String expression = rule.getRule();
+        TableData table = tableRepository.findByName(tableName).orElseThrow(
+                        createRulesEngineException(
+                                "The table with the specified name does not exists.",
+                                HttpStatus.NOT_FOUND,
+                                new DetailBuilder(ErrorCode.ERR_404, "TableData", "name", tableName)
+                        )
+                    );
+        List<String> headers = table.getHeaders();
+        String[] row = table.getRows().get(rowPosition);
         return evaluateRule(expression, headers, row);
     }
 
@@ -151,9 +184,7 @@ public class RuleService{
 
                 processOperator(stack, operatorStack);
                 operatorStack.push(element);
-            } else {                
-                //TODO Reemplazar valores del registro de la tabla
-
+            } else {
                 if(!(isBoolean(element) || isNumber(element))){
                     int columnPosition = isColumn(element, headers);
                     if(columnPosition != -1){
@@ -269,7 +300,7 @@ public class RuleService{
     public void checkPermissions() {
         if(!RulesEngineSecurityContext.getCurrentUserRole().equals(UserRole.RESEARCHER.getRole())){
             throw createRulesEngineException(
-                    "Only an RESEARCHER user can create new rules",
+                    "Only an RESEARCHER user can modify rules data",
                     HttpStatus.FORBIDDEN,
                     new DetailBuilder(ErrorCode.ERR_403)
             ).get();
