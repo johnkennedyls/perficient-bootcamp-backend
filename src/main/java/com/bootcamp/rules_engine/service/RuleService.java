@@ -1,6 +1,8 @@
 package com.bootcamp.rules_engine.service;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Stack;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -14,6 +16,7 @@ import com.bootcamp.rules_engine.enums.UserRole;
 import com.bootcamp.rules_engine.error.exception.DetailBuilder;
 import com.bootcamp.rules_engine.mapper.RuleMapper;
 import com.bootcamp.rules_engine.model.Rule;
+import com.bootcamp.rules_engine.model.TableData;
 import com.bootcamp.rules_engine.repository.RuleRepository;
 import com.bootcamp.rules_engine.repository.TableDataRepository;
 import com.bootcamp.rules_engine.security.RulesEngineSecurityContext;
@@ -29,8 +32,9 @@ public class RuleService{
     
     private final RuleRepository repository;
     private final RuleMapper mapper;
+    private final TableDataRepository tableRepository;
 
-    public Rule createRule(RuleDTO ruleDTO){
+    public RuleDTO createRule(RuleDTO ruleDTO){
         checkPermissions();
         if(repository.isNameInUse(ruleDTO.getName())){
             throw createRulesEngineException(
@@ -41,7 +45,9 @@ public class RuleService{
         }
         Rule newRule = mapper.fromRuleDTO(ruleDTO); 
         newRule.setId(UUID.randomUUID());
-        return this.repository.save(newRule);
+        this.repository.save(newRule);
+        return mapper.fromRuleToRuleDTO(newRule);
+
     }
 
     public RuleDTO getRule(String ruleName) {
@@ -57,6 +63,18 @@ public class RuleService{
         );
     }
 
+    public void deleteRule(String ruleName){
+        checkPermissions();
+        Rule rule = repository.findByName(ruleName).orElseThrow(
+                        createRulesEngineException(
+                                "The rule with the specified name does not exists.",
+                                HttpStatus.NOT_FOUND,
+                                new DetailBuilder(ErrorCode.ERR_404, "Rule", "name", ruleName)
+                        )
+                    );
+        this.repository.deleteById(rule.getId());
+    }
+
     public List<RuleDTO> getAllRules() {
         return repository.findAll()
                 .stream()
@@ -64,30 +82,72 @@ public class RuleService{
                 .collect(Collectors.toList());
     }
 
-    public boolean evaluateRule(String ruleName, String[] headers, String[] row) {
-        String expression= getRule(ruleName).getRule();
+    public List<Boolean> evaluateRuleToTable(String rulename, String tableName){
+        List<Boolean> results = new ArrayList<Boolean>();
+        //TODO Exception
+        String expression = repository.findByName(rulename).get().getRule();
+        //TODO Exception
+        Optional<TableData> table = tableRepository.findByName(tableName);
+        List<String> headers = table.get().getHeaders();
+        List<String[]> rows = table.get().getRows();
+        for(String[] row : rows){
+            results.add(evaluateRule(expression, headers, row));
+        }
+        return results;
+    }
+
+    public List<Boolean> evaluateRuleToRegistersList(String rulename, String tableName, List<Integer> rowsPosition){
+        List<Boolean> results = new ArrayList<Boolean>();
+        List<String[]> rowsToEvaluate = new ArrayList<String[]>();
+        //TODO Exception
+        String expression = repository.findByName(rulename).get().getRule();
+        //TODO Exception
+        Optional<TableData> table = tableRepository.findByName(tableName);
+        List<String> headers = table.get().getHeaders();
+        List<String[]> rows = table.get().getRows();
+        for(Integer elementIndex : rowsPosition){
+            rowsToEvaluate.add(rows.get(elementIndex));
+        }
+        for(String[] row : rowsToEvaluate){
+            results.add(evaluateRule(expression, headers, row));
+        }
+        return results;
+
+    }
+
+    public boolean evaluateRuleToRegister(String rulename, String tableName, int rowPosition){
+        //TODO Exception
+        String expression = repository.findByName(rulename).get().getRule();
+        //TODO Exception
+        Optional<TableData> table = tableRepository.findByName(tableName);
+        List<String> headers = table.get().getHeaders();
+        String[] row = table.get().getRows().get(rowPosition);
+        return evaluateRule(expression, headers, row);
+    }
+
+    public boolean evaluateRule(String expression, List<String> headers, String[] row) {
         String[] elements = expression.split(" ");
         Stack<String> stack = new Stack<>();
         Stack<String> operatorStack = new Stack<>();
 
         for (String element : elements) {
-            if (element == "(")  {
+            if (element.equals("("))  {
 
                 operatorStack.push(element);
-            } else if (element == ")") {
+            } else if (element.equals(")")) {
 
-                while (!operatorStack.isEmpty() && operatorStack.peek() != "(") {
+                while (!operatorStack.isEmpty() && !operatorStack.peek().equals("(")) {
                     processOperator(stack, operatorStack);
                 }
 
-                if (!operatorStack.isEmpty() && operatorStack.peek() == "(") {
+                if (!operatorStack.isEmpty() && operatorStack.peek().equals("(")) {
                     operatorStack.pop();
                 }
-            } else if (element == "!=" || element == ">" || element == "<" || element == "="
-                || element == ">=" || element == "<=") {
+            } else if (element.equals("!=") || element.equals(">") || element.equals("<") || element.equals("=")
+                || element.equals(">=") || element.equals("<=")) {
 
                 operatorStack.push(element);
-            } else if (element == "&" || element == "|") {
+            } else if (element.equals("&") || element.equals("|")) {
 
                 processOperator(stack, operatorStack);
                 operatorStack.push(element);
@@ -97,7 +157,7 @@ public class RuleService{
                 if(!(isBoolean(element) || isNumber(element))){
                     int columnPosition = isColumn(element, headers);
                     if(columnPosition != -1){
-                        element = row[columnPosition];
+                        element = ""+row[columnPosition];
                     }
                 }
 
@@ -174,9 +234,9 @@ public class RuleService{
     public boolean performTextOperation(String operand1, String operand2, String operator) {
         switch (operator) {
             case "=":
-                return operand1 == operand2;
+                return operand1.equals(operand2);
             case "!=":
-                return operand1 != operand2;
+                return !(operand1.equals(operand2));
             default:
                 return false;
         }
@@ -195,10 +255,10 @@ public class RuleService{
         }
     }
 
-    public int isColumn(String element, String[] headers){
+    public int isColumn(String element, List<String> headers){
         int result=-1;
-        for (int i=0;i < headers.length;i++) {
-            if(element.equals(headers[i])){
+        for (int i=0;i < headers.size();i++) {
+            if(element.equals(headers.get(i))){
                 result = i;
                 break;
             }

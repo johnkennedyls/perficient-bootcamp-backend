@@ -6,12 +6,15 @@ import lombok.*;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.Table;
+
 import java.util.List;
 import java.util.UUID;
 
 @Getter
 @Setter
 @Entity
+@Table
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
