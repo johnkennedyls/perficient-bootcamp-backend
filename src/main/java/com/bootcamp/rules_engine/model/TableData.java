@@ -12,14 +12,15 @@ import java.util.UUID;
 @NoArgsConstructor
 @Builder
 @Entity
+@Table
 public class TableData {
     @Id
     private UUID tableId;
     private String name;
     private String ownerEmail;
-    @Transient
+    @ElementCollection
     private List<String> headers;
-    @Transient
+    @ElementCollection
     private List<String[]> rows;
     @ElementCollection
     private List<String> types;
