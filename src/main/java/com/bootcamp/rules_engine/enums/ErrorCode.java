@@ -7,8 +7,8 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum ErrorCode {
 
-    ERR_INVALID_TABLE_DATA("ERR_INVALID_TABLE_DATA", "Error: Column or row value not are same"),
-    ERR_COLUMN_NAME("ERR_COLUMN_NAME", "Error: Column %s contains spaces"),
+    ERR_INVALID_TABLE_DATA("ERR_INVALID_TABLE_DATA", "Column or row value not are same"),
+    ERR_COLUMN_NAME("ERR_COLUMN_NAME", "Column header: %s, contains spaces"),
     ERR_404("ERR_404", "%s with %s: %s not found."),
     ERR_500("ERR_500", "Oops, we ran into an error."),
     ERR_400("ERR_400", "Field %s %s."),

@@ -28,10 +28,11 @@ public class TableDataService {
     private final TableDataRepository tableDataRepository;
 
     public void saveTable(List<String[]> rows, String originalFilename) {
-        //checkPermissions();
+        checkPermissions();
 
         List<String> headers = Arrays.asList(rows.get(1));
         List<String> types = Arrays.asList(rows.get(0));
+        validateColumnNames(headers);
         validateTableData(headers, types, rows);
         rows.remove(0);
         rows.remove(0);
@@ -51,7 +52,7 @@ public class TableDataService {
     }
 
     public void createTableInDatabase(TableData newTableData) {
-        validateColumnNames(newTableData.getHeaders());
+//        validateColumnNames(newTableData.getHeaders());
 
         StringBuilder queryBuilder = new StringBuilder("CREATE TABLE ")
                 .append(newTableData.getName())
@@ -110,7 +111,11 @@ public class TableDataService {
     private void validateColumnNames(List<String> headers) {
         for (String columnName : headers) {
             if (columnName.contains(" ")) {
-                throw new ColumnNameException("Column name cannot contain spaces: " + columnName);
+                throw createRulesEngineException(
+                        "Column's headers cannot contain spaces.",
+                        HttpStatus.BAD_REQUEST,
+                        new DetailBuilder(ErrorCode.ERR_COLUMN_NAME, columnName)
+                ).get();
             }
         }
     }

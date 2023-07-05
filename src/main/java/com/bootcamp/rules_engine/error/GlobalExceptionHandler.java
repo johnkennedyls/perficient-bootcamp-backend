@@ -56,8 +56,8 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(InvalidTableDataException.class)
     public ResponseEntity<RulesEngineErrorDetail> handleColumnNameException(InvalidTableDataException ex) {
         RulesEngineErrorDetail errorDetail = new RulesEngineErrorDetail(ex.getMessage(), "ERR_INVALID_TABLE_DATA");
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorDetail);
-    }
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorDetail);
+        }
 
 
     private RulesEngineErrorDetail mapBindingResultToError(ObjectError objectError){

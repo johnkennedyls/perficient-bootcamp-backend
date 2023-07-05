@@ -71,14 +71,14 @@ public class SecurityConfiguration {
     public AuthorizationManager<RequestAuthorizationContext> requestAuthorizationContextAuthorizationManager
             (HandlerMappingIntrospector introspector){
         RequestMatcher permitAll = new AndRequestMatcher(new MvcRequestMatcher(introspector, "/token"));
-        RequestMatcher permitTables = new AndRequestMatcher(new MvcRequestMatcher(introspector, "/tables/create"));
+//        RequestMatcher permitTables = new AndRequestMatcher(new MvcRequestMatcher(introspector, "/tables/create"));
 
         MvcRequestMatcher mvcRequestMatcher;
 
         RequestMatcherDelegatingAuthorizationManager.Builder managerBuilder
                 = RequestMatcherDelegatingAuthorizationManager.builder()
-                .add(permitAll, (context, other) -> new AuthorizationDecision(true))
-                .add(permitTables, (context, other) -> new AuthorizationDecision(true));
+                .add(permitAll, (context, other) -> new AuthorizationDecision(true));
+//                .add(permitTables, (context, other) -> new AuthorizationDecision(true));
 
         managerBuilder.add(new MvcRequestMatcher(introspector, "/roles/**"),
                AuthorityAuthorizationManager.hasAnyAuthority("SCOPE_ADMIN"));
