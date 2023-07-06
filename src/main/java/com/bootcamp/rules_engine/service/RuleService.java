@@ -45,7 +45,7 @@ public class RuleService{
         }
         Rule newRule = mapper.fromRuleDTO(ruleDTO); 
         newRule.setId(UUID.randomUUID());
-        this.repository.save(newRule);
+        repository.save(newRule);
         return mapper.fromRuleToRuleDTO(newRule);
 
     }
@@ -298,9 +298,9 @@ public class RuleService{
     }
 
     public void checkPermissions() {
-        if(!RulesEngineSecurityContext.getCurrentUserRole().equals(UserRole.RESEARCHER.getRole())){
+        if(!(RulesEngineSecurityContext.getCurrentUserRole().equals(UserRole.RESEARCHER.getRole()) || RulesEngineSecurityContext.getCurrentUserRole().equals(UserRole.ADMIN.getRole()))){
             throw createRulesEngineException(
-                    "Only an RESEARCHER user can modify rules data",
+                    "Only an RESEARCHER or ADMIN user can modify rules data",
                     HttpStatus.FORBIDDEN,
                     new DetailBuilder(ErrorCode.ERR_403)
             ).get();

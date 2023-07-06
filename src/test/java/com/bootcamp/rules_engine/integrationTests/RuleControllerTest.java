@@ -1,10 +1,8 @@
 package com.bootcamp.rules_engine.integrationTests;
 
 import com.bootcamp.rules_engine.dto.request.LoginDTO;
-import com.bootcamp.rules_engine.dto.request.RoleDTO;
 import com.bootcamp.rules_engine.dto.request.RuleDTO;
 import com.bootcamp.rules_engine.dto.request.TokenDTO;
-import com.bootcamp.rules_engine.enums.UserRole;
 import com.bootcamp.rules_engine.service.RuleService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
@@ -49,8 +47,17 @@ public class RuleControllerTest {
     @Test
     public void testCreateRule() throws Exception {
         RuleDTO ruleDTO = defaultRuleDTO();
+        var resultToken = mockMvc.perform(MockMvcRequestBuilders.post("/token").content(
+                                objectMapper.writeValueAsString(new LoginDTO("samuel@gmail.com", "password"))
+                        )
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andReturn();
+        TokenDTO token = objectMapper.readValue(resultToken.getResponse().getContentAsString(),TokenDTO.class);
         var result = mockMvc.perform(MockMvcRequestBuilders.post("/rules/create")
                     .content(objectMapper.writeValueAsString(ruleDTO))
+                    .header("Authorization", "Bearer "+token.getToken())
                     .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 //.andExpect(jsonPath("$.name").value("testRule"))
@@ -64,10 +71,12 @@ public class RuleControllerTest {
         when(ruleService.getRule("RuleTest1")).thenReturn(
             new RuleDTO("RuleTest1", "1<2"));
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/rules/{name}", "RuleTest1"))
+        var result = mockMvc.perform(MockMvcRequestBuilders.get("/rules/{name}", "RuleTest1"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.name").value("RuleTest1"))
-                .andExpect(jsonPath("$.rule").value("1<2"));
+                .andExpect(jsonPath("$.rule").value("1<2"))
+                .andReturn();
+        System.out.println(result.getResponse().getContentAsString());
     }
 
     @Test
@@ -78,13 +87,15 @@ public class RuleControllerTest {
             new RuleDTO("RuleTest3", "1=2")
         ));
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/rules/getRules"))
+        var result = mockMvc.perform(MockMvcRequestBuilders.get("/rules/getRules"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").isArray())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.length()").value(3))
                 .andExpect(MockMvcResultMatchers.jsonPath("$[0].name").value("RuleTest1"))
                 .andExpect(MockMvcResultMatchers.jsonPath("$[1].name").value("RuleTest2"))
-                .andExpect(MockMvcResultMatchers.jsonPath("$[2].name").value("RuleTest3"));
+                .andExpect(MockMvcResultMatchers.jsonPath("$[2].name").value("RuleTest3"))
+                .andReturn();
+        System.out.println(result.getResponse().getContentAsString());
     }
 
     @Test
@@ -92,9 +103,11 @@ public class RuleControllerTest {
         when(ruleService.evaluateRuleToRegister("RuleTest1", "tableTest1", 0))
             .thenReturn(true);
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/rules/evaluate/register/{ruleName}/{tableName}/{rowPosition}", "RuleTest1", "tableTest1", 0))
+        var result = mockMvc.perform(MockMvcRequestBuilders.get("/rules/evaluate/register/{ruleName}/{tableName}/{rowPosition}", "RuleTest1", "tableTest1", 0))
                 .andExpect(status().isOk())
-                .andExpect(content().string("true"));
+                .andExpect(content().string("true"))
+                .andReturn();
+        System.out.println(result.getResponse().getContentAsString());
     }
 
     @Test
@@ -102,11 +115,13 @@ public class RuleControllerTest {
         when(ruleService.evaluateRuleToTable("RuleTest1", "tableTest1"))
             .thenReturn(Arrays.asList(true, false));
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/rules/evaluate/table/{ruleName}/{tableName}", "RuleTest1", "tableTest1"))
+        var result = mockMvc.perform(MockMvcRequestBuilders.get("/rules/evaluate/table/{ruleName}/{tableName}", "RuleTest1", "tableTest1"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").isArray())
                 .andExpect(jsonPath("$[0]").value(true))
-                .andExpect(jsonPath("$[1]").value(false));
+                .andExpect(jsonPath("$[1]").value(false))
+                .andReturn();
+        System.out.println(result.getResponse().getContentAsString());
     }
 
     @Test
@@ -115,11 +130,11 @@ public class RuleControllerTest {
             Arrays.asList(0,1)))
             .thenReturn(Arrays.asList(true, false));
 
-        var result = mockMvc.perform(MockMvcRequestBuilders.get("/rules/evaluate/List/{ruleName}/{tableName}/{rowPositions}", "rule1", "table1", "0,1"))
+        var result = mockMvc.perform(MockMvcRequestBuilders.get("/rules/evaluate/List/{ruleName}/{tableName}/{rowPositions}", "RuleTest1", "tableTest1", "0,1"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").isArray())
-                //.andExpect(jsonPath("$[0]").value(true))
-                //.andExpect(jsonPath("$[1]").value(false))
+                .andExpect(jsonPath("$[0]").value(true))
+                .andExpect(jsonPath("$[1]").value(false))
                 .andReturn();
         System.out.println("EVALUATE RULE RESPONSE: " + result.getResponse().getContentAsString());
 

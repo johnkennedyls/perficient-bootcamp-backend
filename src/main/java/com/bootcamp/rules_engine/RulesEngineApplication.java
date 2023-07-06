@@ -6,6 +6,9 @@ import com.bootcamp.rules_engine.model.Role;
 import com.bootcamp.rules_engine.model.RulesEngineUser;
 import com.bootcamp.rules_engine.repository.RoleRepository;
 import com.bootcamp.rules_engine.repository.UserRepository;
+
+import springfox.documentation.swagger2.annotations.EnableSwagger2;
+
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -16,6 +19,7 @@ import java.util.UUID;
 
 
 @SpringBootApplication
+@EnableSwagger2
 public class RulesEngineApplication {
 
 	public static void main(String[] args) {
