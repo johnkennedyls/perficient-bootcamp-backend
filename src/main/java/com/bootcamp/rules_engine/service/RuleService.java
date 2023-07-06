@@ -35,7 +35,7 @@ public class RuleService{
     private final TableDataRepository tableRepository;
 
     public RuleDTO createRule(RuleDTO ruleDTO){
-        checkPermissions();
+        //checkPermissions();
         if(repository.isNameInUse(ruleDTO.getName())){
             throw createRulesEngineException(
                     "Another rule already has this name.",
@@ -63,7 +63,7 @@ public class RuleService{
     }
 
     public void deleteRule(String ruleName){
-        checkPermissions();
+        //checkPermissions();
         Rule rule = repository.findByName(ruleName).orElseThrow(
                         createRulesEngineException(
                                 "The rule with the specified name does not exists.",
@@ -164,6 +164,9 @@ public class RuleService{
         Stack<String> operatorStack = new Stack<>();
 
         for (String element : elements) {
+
+            element = changeOperator(element);
+
             if (element.equals("("))  {
 
                 operatorStack.push(element);
@@ -176,11 +179,15 @@ public class RuleService{
                 if (!operatorStack.isEmpty() && operatorStack.peek().equals("(")) {
                     operatorStack.pop();
                 }
-            } else if (element.equals("!=") || element.equals(">") || element.equals("<") || element.equals("=")
+            } else if (element.equals("!=") || element.equals("different") || element.equals("notsame")
+                || element.equals(">") || element.equals("greaterOrEquals")
+                || element.equals("<") || element.equals("lowerOrEquals")
+                || element.equals("=") || element.equals("equals") || element.equals("same")
                 || element.equals(">=") || element.equals("<=")) {
 
                 operatorStack.push(element);
-            } else if (element.equals("&") || element.equals("|")) {
+            } else if (element.equals("&") || element.equals("AND")
+                || element.equals("|") || element.equals("OR")) {
 
                 processOperator(stack, operatorStack);
                 operatorStack.push(element);
@@ -229,6 +236,7 @@ public class RuleService{
     }
 
     public boolean performBooleanOperation(boolean operand1, boolean operand2, String operator) {
+
         switch (operator) {
             case "=":
                 return operand1 == operand2;
@@ -295,6 +303,23 @@ public class RuleService{
             }
         }
         return result;
+    }
+
+    public String changeOperator(String element){
+        if (element.equals("!=") || element.equals("different") || element.equals("notsame")){
+            element = ("!=");
+        } if ( element.equals("=") || element.equals("equals") || element.equals("same")){
+            element = ("=");
+        } if (element.equals(">=") || element.equals("greaterOrEquals")){
+            element = (">=");
+        } if (element.equals("<=") || element.equals("lowerOrEquals")){
+            element = ("<=");
+        } if (element.equals("&") || element.equals("AND")){
+            element = ("&");
+        } if (element.equals("|") || element.equals("OR")){
+            element = ("|");
+        }
+        return element;
     }
 
     public void checkPermissions() {
