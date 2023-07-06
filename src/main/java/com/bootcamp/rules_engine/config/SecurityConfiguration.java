@@ -71,23 +71,26 @@ public class SecurityConfiguration {
     public AuthorizationManager<RequestAuthorizationContext> requestAuthorizationContextAuthorizationManager
             (HandlerMappingIntrospector introspector){
         RequestMatcher permitAll = new AndRequestMatcher(new MvcRequestMatcher(introspector, "/token"));
-//        RequestMatcher permitTables = new AndRequestMatcher(new MvcRequestMatcher(introspector, "/tables/create"));
+       // RequestMatcher permitUsers = new AndRequestMatcher(new MvcRequestMatcher(introspector, "/users"));
 
         MvcRequestMatcher mvcRequestMatcher;
 
         RequestMatcherDelegatingAuthorizationManager.Builder managerBuilder
                 = RequestMatcherDelegatingAuthorizationManager.builder()
                 .add(permitAll, (context, other) -> new AuthorizationDecision(true));
-//                .add(permitTables, (context, other) -> new AuthorizationDecision(true));
+               // .add(permitUsers, (context, other) -> new AuthorizationDecision(true));
 
         managerBuilder.add(new MvcRequestMatcher(introspector, "/roles/**"),
                AuthorityAuthorizationManager.hasAnyAuthority("SCOPE_ADMIN"));
 
         managerBuilder.add(new MvcRequestMatcher(introspector, "/users/**"),
-                AuthorityAuthorizationManager.hasAnyAuthority("SCOPE_ADMIN"));
+                AuthorityAuthorizationManager.hasAnyAuthority("SCOPE_ADMIN", "SCOPE_CONSULTANT", "SCOPE_RESEARCHER"));
 
         managerBuilder.add(new MvcRequestMatcher(introspector, "/tables/**"),
                 AuthorityAuthorizationManager.hasAnyAuthority("SCOPE_RESEARCHER"));
+
+        managerBuilder.add(new MvcRequestMatcher(introspector, "/rules/**"),
+                AuthorityAuthorizationManager.hasAnyAuthority("SCOPE_RESEARCHER", "SCOPE_CONSULTANT"));
 
         AuthorizationManager<HttpServletRequest> manager = managerBuilder.build();
         return (authentication, object) -> manager.check(authentication, object.getRequest());
